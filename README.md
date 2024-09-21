@@ -1,3 +1,3 @@
-# Computção-Gráfica-
+# Computação-Gráfica-
 
 Projeto de Computação gráfica 
