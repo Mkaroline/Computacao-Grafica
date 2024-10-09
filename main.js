@@ -15,6 +15,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableKeys = false;//Desativa o controle por teclas das setas
 controls.update();
 
 // Luz ambiente e luz direcional
@@ -54,8 +55,106 @@ class Submarino {
     }
 }
 
-
 const submarino = new Submarino();
+
+//Variáveis de controle de movimento
+let arrowUp = false;
+let arrowDown = false;
+let arrowRight = false;
+let arrowLeft = false;
+let wKey = false;
+let sKey = false;
+
+//Função de animação
+function animate(){
+    renderer.render(scene, camera);
+
+    //Movimentar câmera
+    if(arrowUp){
+        camera.position.y -= 0.1;
+    }
+    if(arrowDown){
+        camera.position.y += 0.1;
+    }
+    if(arrowRight){
+        camera.position.x -= 0.1;
+    }
+    if(arrowLeft){
+        camera.position.x += 0.1;
+    }
+
+    //Movimetar o submarino e a câmera juntos
+    if(wKey && submarino.model){
+        submarino.model.position.z -= 0.1;
+        camera.position.z -= 0.1;//A câmera segue o submarino 
+    }
+    if(sKey && submarino.model){
+        submarino.model.position.z += 0.1;
+        camera.position.z += 0.1;//A câmera segue o submarino
+    }
+
+    controls.update();
+}
+
+//Inicia o loop de animação
+renderer.setAnimationLoop(animate);
+
+//Inicia a animação
+animate();
+
+//Eventos de teclado
+document.addEventiListener("keydown", onDocumentKeyDown, false);
+document.addEventListener("keyup", onDocumentKeyUp, false);
+
+function onDocumentKeyDown(event){
+    switch(event.key){
+        case "ArrowUp":
+            arrowUp = true;
+            break;
+        case "ArrowDown":
+            arrowDown = true;
+            break;
+        case "ArrowRight":
+            arrowRight = true;
+            break;
+        case "ArrowLeft":
+            arrowLeft = true;
+            break;
+        case "w":
+        case "W"://Mapeia tanto "w" quanto "W"
+            wKey = true;
+            break;
+        case "s":
+        case "S"://Mapeia tanto "s" quanto "S"
+            sKey = true;
+            break;
+    }
+}
+
+function onDocumentKeyUp(event){
+    switch(event.key){
+        case "ArrowUp":
+            arrowUp = false;
+            break;
+        case "ArrowDown":
+            arrowDown = false;
+            break;
+        case "ArrowRight":
+            arrowRight = false;
+            break;
+        case "ArrowLeft":
+            arrowLeft = false;
+            break;
+        case "w":
+        case "W":
+            wKey = false;
+            break;
+        case "s":
+        case "S":
+            sKey = false;
+            break;
+    }
+}
 
 class Fundo {
     constructor() {
@@ -166,7 +265,7 @@ water.position.y = 210;
 scene.add(water);
 
 // Variáveis de controle de movimento
-let arrowUp = false;
+/*let arrowUp = false;
 let arrowDown = false;
 let arrowRight = false;
 let arrowLeft = false;
@@ -263,4 +362,4 @@ function onDocumentKeyUp(event) {
             sKey = false;
             break;
     }
-}
+}*/
