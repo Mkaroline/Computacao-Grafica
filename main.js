@@ -13,11 +13,9 @@ camera.position.set(50, 5, -275);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-const clock = new THREE.Clock();
 
-// Adiciona o controle da câmera
-const control = new OrbitControls(camera, renderer.domElement);
-control.update();
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.update();
 
 // Velocidades de movimento e rotação do submarino
 const velMov = 0.5;
@@ -145,7 +143,7 @@ class Fundo {
     }
 }
 
-const fundo = new Fundo();
+const submarino = new Submarino();
 
 // Classe Caverna
 class Caverna {
@@ -290,238 +288,129 @@ class Peixes {
     }
 }
 
-const peixes = new Peixes();
-
-class PeixesR {
-    constructor() {
-        this.model = null;
-        this.mixer = null; // Adiciona um mixer para controlar animações
-        this.load(this);
-    }
-
-    load(object) {
-        const loader = new GLTFLoader();
-        const textureLoader = new THREE.TextureLoader();
-
-        const texturas = [
-            textureLoader.load('./Modelo/school_of_fish/textures/material_0_diffuse.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_0_emissive.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_0_normal.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_0_occlusion.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_0_specularGlossiness.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_1_diffuse.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_1_normal.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_1_occlusion.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_1_specularGlossiness.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_3_diffuse.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_3_emissive.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_3_occlusion.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_3_normal.png'),
-            textureLoader.load('./Modelo/school_of_fish/textures/material_3_specularGlossiness.png'),
-        ];
-
-        loader.load('./Modelo/school_of_fish/scene.gltf', (gltf) => {
-            object.model = gltf.scene;
-
-            // Adiciona animações ao mixer
-            object.mixer = new THREE.AnimationMixer(object.model);
-            gltf.animations.forEach((clip) => {
-                object.mixer.clipAction(clip).play();
-            });
-
-            object.model.scale.set(2, 2, 2);
-            object.model.position.set(10, -1, 135);
-            object.model.rotation.set(0, -Math.PI / 45, 0);
-            scene.add(object.model);
-        }, (xhr) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% carregado');
-        }, (error) => {
-            console.log('Erro ao carregar o modelo Atlantis:', error);
-        });
-    }
-
-    // Método para atualizar a animação
-    update(delta) {
-        if (this.mixer) {
-            this.mixer.update(delta);
-        }
-    }
+// Array de gotas
+let gotas = [];
+for (let i = 0; i < 100; i++) {
+    let gota = new Gota();
+    gotas.push(gota);
 }
 
-const peixesr = new PeixesR();
 
-class Peixes2 {
-    constructor() {
-        this.model = null;
-        this.mixer = null; // Adiciona um mixer para controlar animações
-        this.load(this);
+
+// Criação do plano de água
+const waterGeometry = new THREE.PlaneGeometry(500, 500);
+const water = new Water(
+    waterGeometry,
+    {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('textures/waternormals.jpg', function (texture) {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        }),
+        waterColor: 0x031f4d,
+        distortionScale: 3.7,
     }
+);
+water.rotation.x = -Math.PI / 2;
+water.position.y = 210;
+scene.add(water);
 
-    load(object) {
-        const loader = new GLTFLoader();
-        const textureLoader = new THREE.TextureLoader();
-
-       
-        const texturas = [
-            textureLoader.load('./Modelo/fishs/textures/Material.001_baseColor.jpeg'),
-         
-        ];
-
-        loader.load('./Modelo/fishs/scene.gltf', (gltf) => {
-            object.model = gltf.scene;
-
-            // Adiciona animações ao mixer
-            object.mixer = new THREE.AnimationMixer(object.model);
-            gltf.animations.forEach((clip) => {
-                object.mixer.clipAction(clip).play();
-            });
-
-            object.model.scale.set(2, 2, 2);
-            object.model.position.set(30, 10, 175);
-            object.model.rotation.set(0, -Math.PI / 45, 0);
-            scene.add(object.model);
-        }, (xhr) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% carregado');
-        }, (error) => {
-            console.log('Erro ao carregar o modelo Atlantis:', error);
-        });
-    }
-
-    // Método para atualizar a animação
-    update(delta) {
-        if (this.mixer) {
-            this.mixer.update(delta);
-        }
-    }
-}
-
-const peixes2 = new Peixes2();
-
-class Tartaruga {
-    constructor() {
-        this.model = null;
-        this.mixer = null;
-        this.load(this);
-    }
-
-    load(object) {
-        const loader = new GLTFLoader();
-        const textureLoader = new THREE.TextureLoader();
-
-        // Carregar as texturas
-        const texturas = [
-            textureLoader.load('./Modelo/turtle_swim/textures/greenbody_baseColor.jpeg'),
-            textureLoader.load('./Modelo/turtle_swim/textures/greenbody_normal.png'),
-            textureLoader.load('./Modelo/turtle_swim/textures/greeneye_baseColor.png'),
-            textureLoader.load('./Modelo/turtle_swim/textures/greeneye_normal.png'),
-        ];
-
-        loader.load('./Modelo/turtle_swim/scene.gltf', (gltf) => {
-            object.model = gltf.scene;
-
-            // Adiciona animações ao mixer
-            object.mixer = new THREE.AnimationMixer(object.model);
-            gltf.animations.forEach((clip) => {
-                object.mixer.clipAction(clip).play();
-            });
-
-            object.model.scale.set(1, 1, 1); // Ajuste a escala
-            object.model.position.set(-10, -9, 200); // Ajuste a posição
-
-            // Aplicar texturas se necessário
-            object.model.traverse((child) => {
-                if (child.isMesh) {
-                    child.material.map = texturas[0]; // Exemplo de aplicação
-                }
-            });
-
-            scene.add(object.model);
-        }, (xhr) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% carregado');
-        }, (error) => {
-            console.log('Erro ao carregar o modelo Atlantis:', error);
-        });
-    }
-
-    // Método para atualizar a animação
-    update(delta) {
-        if (this.mixer) {
-            this.mixer.update(delta);
-        }
-    }
-}
-
-const tartaruga = new Tartaruga();
-
-class Shark {
-    constructor() {
-        this.model = null;
-        this.mixer = null;
-        this.load(this);
-    }
-
-    load(object) {
-        const loader = new GLTFLoader();
-        const textureLoader = new THREE.TextureLoader();
-
-        // Carregar as texturas
-        const texturas = [
-            textureLoader.load('./Modelo/animated_swimming_great_white_shark_loop (1)/textures/material_0_diffuse.png'),
-            textureLoader.load('./Modelo/animated_swimming_great_white_shark_loop (1)/textures/material_0_normal.png'),
-            textureLoader.load('./Modelo/animated_swimming_great_white_shark_loop (1)/textures/material_0_occlusion.png'),
-            textureLoader.load('./Modelo/animated_swimming_great_white_shark_loop (1)/textures/material_0_specularGlossiness.png'),
-        ];
-
-        loader.load('./Modelo/animated_swimming_great_white_shark_loop (1)/scene.gltf', (gltf) => {
-            object.model = gltf.scene;
-
-            // Adiciona animações ao mixer
-            object.mixer = new THREE.AnimationMixer(object.model);
-            gltf.animations.forEach((clip) => {
-                object.mixer.clipAction(clip).play();
-            });
-
-            object.model.scale.set(2, 2, 2); // Ajuste a escala
-            object.model.position.set(10, 10, 400); // Ajuste a posição
-
-            // Aplicar texturas se necessário
-            object.model.traverse((child) => {
-                if (child.isMesh) {
-                    child.material.map = texturas[0]; // Exemplo de aplicação
-                }
-            });
-
-            scene.add(object.model);
-        }, (xhr) => {
-            console.log((xhr.loaded / xhr.total * 100) + '% carregado');
-        }, (error) => {
-            console.log('Erro ao carregar o modelo Atlantis:', error);
-        });
-    }
-
-    // Método para atualizar a animação
-    update(delta) {
-        if (this.mixer) {
-            this.mixer.update(delta);
-        }
-    }
-}
-
-const shark = new Shark();
+// Variáveis de controle de movimento
+let arrowUp = false;
+let arrowDown = false;
+let arrowRight = false;
+let arrowLeft = false;
+let wKey = false;
+let sKey = false;
 
 
-// No seu loop de animação principal (geralmente a função render), adicione:
+// Função de animação
 function animate() {
-    requestAnimationFrame(animate);
-    
-    const delta = clock.getDelta(); // O tempo que passou desde a última chamada
-    peixes.update(delta); // Atualiza a animação dos peixes
-    peixesr.update(delta);
-    tartaruga.update(delta);
-    peixes2.update(delta);
-    shark.update(delta);
     renderer.render(scene, camera);
+    for (let gota of gotas) {
+        gota.update();
+    }
+
+     // Movimentar câmera
+     if (arrowUp) {
+        camera.position.y -= 0.1;
+    }
+    if (arrowDown) {
+        camera.position.y += 0.1;
+    }
+    if (arrowRight) {
+        camera.position.x -= 0.1;
+    }
+    if (arrowLeft) {
+        camera.position.x += 0.1;
+    }
+
+    // Movimentar submarino e câmera juntos
+    if (wKey && submarino.model) {
+        submarino.model.position.z -= 0.1;
+        camera.position.z -= 0.1;
+    }
+    if (sKey && submarino.model) {
+        submarino.model.position.z += 0.1;
+        camera.position.z += 0.1;
+    }
+
+
+    controls.update();
 }
 
-// Inicia a animação
+// Inicia o loop de animação
+renderer.setAnimationLoop(animate);
+
+// Iniciar a animação
 animate();
+
+// Eventos de teclado
+document.addEventListener("keydown", onDocumentKeyDown, false);
+document.addEventListener("keyup", onDocumentKeyUp, false);
+
+function onDocumentKeyDown(event) {
+    switch (event.key) {
+        case "ArrowUp":
+            arrowUp = true;
+            break;
+        case "ArrowDown":
+            arrowDown = true;
+            break;
+        case "ArrowRight":
+            arrowRight = true;
+            break;
+        case "ArrowLeft":
+            arrowLeft = true;
+            break;
+        case "w":
+            wKey = true;
+            break;
+        case "s":
+            sKey = true;
+            break;
+    }
+}
+
+function onDocumentKeyUp(event) {
+    switch (event.key) {
+        case "ArrowUp":
+            arrowUp = false;
+            break;
+        case "ArrowDown":
+            arrowDown = false;
+            break;
+        case "ArrowRight":
+            arrowRight = false;
+            break;
+        case "ArrowLeft":
+            arrowLeft = false;
+            break;
+        case "w":
+            wKey = false;
+            break;
+        case "s":
+            sKey = false;
+            break;
+    }
+}
