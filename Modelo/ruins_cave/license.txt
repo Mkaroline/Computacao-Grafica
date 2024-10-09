@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ruins cave
+* source:	https://sketchfab.com/3d-models/ruins-cave-e65d03f1119643438a5901a85512e452
+* author:	kozok-3d (https://sketchfab.com/kozok-3d)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ruins cave" (https://sketchfab.com/3d-models/ruins-cave-e65d03f1119643438a5901a85512e452) by kozok-3d (https://sketchfab.com/kozok-3d) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

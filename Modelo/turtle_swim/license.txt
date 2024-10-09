@@ -1,0 +1,11 @@
+Model Information:
+* title:	Turtle_Swim
+* source:	https://sketchfab.com/3d-models/turtle-swim-71f298c8e76e424ca5c548f64e569309
+* author:	yaniu03 (https://sketchfab.com/yaniu03)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Turtle_Swim" (https://sketchfab.com/3d-models/turtle-swim-71f298c8e76e424ca5c548f64e569309) by yaniu03 (https://sketchfab.com/yaniu03) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
