@@ -28,7 +28,7 @@ let submarino;
 const positionsLog = [];
 
 // Adicionando iluminação ambiente
-const ambientLight = new THREE.AmbientLight(0x404040, 2);
+const ambientLight = new THREE.AmbientLight(0x191970, 5);
 scene.add(ambientLight);
 
 // Adicionando iluminação direcional
@@ -61,8 +61,8 @@ function handleSubmarineMovement(event) {
         case 'ArrowDown': moveSubmarineDown(); break;
         case 'ArrowLeft': rotateSubmarineLeft(); break;
         case 'ArrowRight': rotateSubmarineRight(); break;
-        case 'w': moveSubmarineForward(); break;
-        case 's': moveSubmarineBackward(); break;
+        case 'w': moveSubmarineForward(); break;  // Movimenta o submarino para frente com W
+        case 's': moveSubmarineBackward(); break; // Movimenta o submarino para trás com S
     }
 
     // Atualiza a posição da câmera
@@ -74,12 +74,12 @@ function handleSubmarineMovement(event) {
 
 // Funções de movimentação e rotação do submarino
 function moveSubmarineForward() {
-    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(submarino.quaternion);
+    const direction = new THREE.Vector3(0, 0, 1).applyQuaternion(submarino.quaternion); // Muda o vetor para frente
     submarino.position.add(direction.multiplyScalar(velMov));
 }
 
 function moveSubmarineBackward() {
-    const direction = new THREE.Vector3(0, 0, 1).applyQuaternion(submarino.quaternion);
+    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(submarino.quaternion); // Muda o vetor para trás
     submarino.position.add(direction.multiplyScalar(velMov));
 }
 
@@ -233,6 +233,38 @@ class Atlantis {
 }
 
 const atlantis = new Atlantis();
+
+class Treasure {
+    constructor() {
+        this.model = null;
+        this.load(this);
+    }
+
+    load(object) {
+        const loader = new GLTFLoader();
+        const textureLoader = new THREE.TextureLoader();
+
+        const texturas = [
+            textureLoader.load('./Modelo/treasure_chest/textures/Material.002_baseColor.png'),
+            textureLoader.load('./Modelo/treasure_chest/textures/Material.007_baseColor.png'),
+        ];
+
+        loader.load('./Modelo/treasure_chest/scene.gltf', function (gltf) {
+            object.model = gltf.scene;
+            object.model.scale.set(3, 3, 3);
+            object.model.position.set(10, -5, 285);
+            object.model.rotation.set(0, Math.PI / 2, 0); // 90 graus
+
+            scene.add(object.model);
+        }, function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% carregado');
+        }, function (error) {
+            console.log('Erro ao carregar o modelo Atlantis:', error);
+        });
+    }
+}
+
+const treasure = new Treasure();
 
 class Peixes {
     constructor() {
