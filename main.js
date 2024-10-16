@@ -36,6 +36,33 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(100, 200, 300);
 scene.add(directionalLight);
 
+// Geometria e material das partículas
+const particlesGeometry = new THREE.BufferGeometry();
+const particlesCount = 5000;
+const positionArray = new Float32Array(particlesCount * 3);
+
+// Posição aleatória para as partículas (simulando bolhas)
+for (let i = 0; i < particlesCount * 3; i++) {
+    positionArray[i] = (Math.random() - 0.5) * 500; // Espalha as partículas
+}
+
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3));
+
+// Material das partículas (bolhas brancas semi-translúcidas)
+const particlesMaterial = new THREE.PointsMaterial({
+    size: 0.6,          // Tamanho da bolha
+    transparent: true,   // Transparência ativada
+    opacity: 0.7,        // Nível de opacidade
+    color: 0x88ccee     // Cor suave de bolha
+});
+
+// Criando o sistema de partículas e adicionando à cena
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+
+scene.fog = new THREE.FogExp2(0x031f4d, 0.010); // Cor da névoa e densidade
+renderer.setClearColor(scene.fog.color); // Define a cor de fundo do renderizador
+
 // Carrega o modelo do submarino
 const loader = new GLTFLoader();
 loader.load('./Modelo/Submarine/scene.gltf', function (gltf) {
@@ -552,7 +579,21 @@ function animate() {
     tartaruga.update(delta);
     peixes2.update(delta);
     shark.update(delta);
+
     renderer.render(scene, camera);
+
+    for (let i = 0; i < particlesCount; i++) {
+        let y = particlesGeometry.attributes.position.getY(i);
+        y += 0.1; // Move as bolhas para cima
+
+        if (y > 250) { // Se as bolhas saírem da tela, redefina a posição
+            y = -250;
+        }
+
+        particlesGeometry.attributes.position.setY(i, y);
+    }
+    particlesGeometry.attributes.position.needsUpdate = true; // Atualiza a geometria
+
 }
 
 // Inicia a animação
