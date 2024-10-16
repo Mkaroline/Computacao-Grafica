@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Water } from './threejs/Water.js';
+
 
 // Cena e câmera
 const scene = new THREE.Scene();
@@ -19,6 +19,7 @@ const clock = new THREE.Clock();
 const control = new OrbitControls(camera, renderer.domElement);
 control.update();
 
+
 // Velocidades de movimento e rotação do submarino
 const velMov = 0.5;
 const velRot = 0.5;
@@ -28,13 +29,24 @@ let submarino;
 const positionsLog = [];
 
 // Adicionando iluminação ambiente
-const ambientLight = new THREE.AmbientLight(0x191970, 5);
-scene.add(ambientLight);
-
-// Adicionando iluminação direcional
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(100, 200, 300);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2) ; // Cor branca com intensidade 1
+directionalLight.position.set(0, 1000, 0); // Posição da luz (acima da cena)
 scene.add(directionalLight);
+// spotlight
+
+const spotlight = new THREE.SpotLight(0xffffff); // Cor branca
+spotlight.position.set(35, -7, -350); // Posição do spotlight na cena
+spotlight.angle = Math.PI /20; // Ângulo do spotlight
+spotlight.penumbra = 0; // Penumbra do spotlight
+spotlight.decay = 0.5; // Atenuação da luz com a distância
+spotlight.distance = 150; // Distância máxima da luz
+spotlight.castShadow = true; //sombras
+spotlight.intensity = 50; // intensidade da luz
+scene.add(spotlight);
+scene.add(spotlight.target);
+// Adicione um helper para visualizar o spotlight
+//const spotlightHelper = new THREE.SpotLightHelper(spotlight);;
+//scene.add(spotlightHelper);
 
 // Geometria e material das partículas
 const particlesGeometry = new THREE.BufferGeometry();
@@ -581,6 +593,18 @@ function animate() {
     shark.update(delta);
 
     renderer.render(scene, camera);
+
+    const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(submarino.quaternion);
+
+// Ajuste a posição da luz para ficar na frente do submarino
+    spotlight.position.copy(submarino.position).add(direction.clone().multiplyScalar(2)); // Coloque 10 ou outro valor apropriado
+
+// Direção da luz apontando para onde o submarino está virado
+    spotlight.target.position.copy(submarino.position).add(direction);
+
+// Atualize o spotlight target para garantir que a luz siga o submarino
+    spotlight.target.updateMatrixWorld();
+
 
     for (let i = 0; i < particlesCount; i++) {
         let y = particlesGeometry.attributes.position.getY(i);
