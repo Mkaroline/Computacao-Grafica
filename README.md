@@ -11,6 +11,6 @@ Projeto de Computação gráficaa
 ## :family_man_woman_girl: Equipe
 
 :man_teacher: Docente: [Marco Diego Aurelio Mesquita ]().<br />
-:woman_student: Discente: [Amanda Cristina Alercar Gomes](https://github.com/AmanditaC).<br />
+:woman_student: Discente: [Amanda Cristina Alencar Gomes](https://github.com/AmanditaC).<br />
 :woman_student: Discente: [Maria Karoline Firmino de Moura](https://github.com/Mkaroline).<br />
-:woman_student: Discente: [Renan Lucas Melo Oliveira](https://github.com/RenanLucas19).<br />
+:woman_student: Discente: [Renan Lucas Melo de Oliveira](https://github.com/RenanLucas19).<br />
