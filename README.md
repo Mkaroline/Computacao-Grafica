@@ -1,6 +1,6 @@
 # Computação-Gráfica-
 
-Projeto de Computação gráficaa
+  ## **:computer:** Projeto de Computação gráfica
 
   ## **:computer:** Descrição do Sistema 
 
@@ -9,9 +9,10 @@ Projeto de Computação gráficaa
 
   ## **:computer:** Referência 
 Modelos usados para fazer o cenario: Atlantis (https://sketchfab.com/3d-models/atlantis-ebaf641dbc614554869b36605807fad9).<br />
+                                     Fish      (https://sketchfab.com/3d-models/animated-swimming-tropical-fish-school-loop-62ccf83b35c744d7b5ffb7be80d4ea99).<br />
 
   ## **:computer:** Documentos Utilizados
-Biblioteca Three.js: (https://threejs.org/docs/).<br />
+ Documentação Three.js: (https://threejs.org/docs/).<br />
   
 ## :family_man_woman_girl: Equipe
 
