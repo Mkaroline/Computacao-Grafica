@@ -8,8 +8,10 @@ Projeto de Computação gráficaa
  </p>
 
   ## **:computer:** Referência 
-Modelos usado para fazer o cenario: Atlantis (https://sketchfab.com/3d-models/atlantis-ebaf641dbc614554869b36605807fad9).<br />
+Modelos usados para fazer o cenario: Atlantis (https://sketchfab.com/3d-models/atlantis-ebaf641dbc614554869b36605807fad9).<br />
 
+  ## **:computer:** Documentos Utilizados
+Biblioteca Three.js: (https://threejs.org/docs/).<br />
   
 ## :family_man_woman_girl: Equipe
 
