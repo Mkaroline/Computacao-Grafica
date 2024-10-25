@@ -33,17 +33,16 @@ scene.add(directionalLight);
 
 const spotlight = new THREE.SpotLight(0xffffff); 
 spotlight.position.set(35, -7, -350); 
-spotlight.angle = Math.PI /20; 
-spotlight.penumbra = 0; 
+spotlight.angle = 0.15; 
 spotlight.decay = 0.5; 
-spotlight.distance = 150; 
+spotlight.distance = 300; 
 spotlight.castShadow = true; 
-spotlight.intensity = 50; 
+spotlight.intensity = 80; 
 scene.add(spotlight);
 scene.add(spotlight.target);
 
 const particlesGeometry = new THREE.BufferGeometry();
-const particlesCount = 5000;
+const particlesCount = 8000;
 const positionArray = new Float32Array(particlesCount * 3);
 
 for (let i = 0; i < particlesCount * 3; i++) {
@@ -54,13 +53,13 @@ particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArr
 const particlesMaterial = new THREE.PointsMaterial({
     size: 0.6,
     transparent: true,
-    opacity: 0.7,
+    opacity: 1,
     color: 0x88ccee
 });
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles);
 
-scene.fog = new THREE.FogExp2(0x031f4d, 0.010); 
+scene.fog = new THREE.FogExp2(0x031f4d, 0.05); 
 renderer.setClearColor(scene.fog.color);
 
 const loader = new GLTFLoader();
@@ -87,12 +86,18 @@ function handleSubmarineMovement(event) {
         case 's': moveSubmarineBackward(); break;
     }
 
-    camera.position.set(submarino.position.x, submarino.position.y + 1, submarino.position.z - 6);
+    // Calcula a direção em que o submarino está olhando
+    const forwardDirection = new THREE.Vector3(0, 0, -1).applyQuaternion(submarino.quaternion);
 
+    // Ajusta a posição da câmera para seguir a direção do submarino
+    const cameraOffset = new THREE.Vector3(0, 1, -4); // Define um deslocamento
+    camera.position.copy(submarino.position).add(cameraOffset.applyQuaternion(submarino.quaternion));
+    
+    // Faz a câmera olhar na direção em que o submarino está olhando
+    camera.lookAt(submarino.position.clone().add(forwardDirection));
 
     logSubmarinePosition();
 }
-
 
 function moveSubmarineForward() {
     const direction = new THREE.Vector3(0, 0, 1).applyQuaternion(submarino.quaternion);
