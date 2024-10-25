@@ -5,6 +5,7 @@ import Caverna from './Classes_modelos/Caverna.js';
 import Atlantis from './Classes_modelos/Atlantis.js';
 import Fundo from './Classes_modelos/Fundo.js';
 import Peixes from './Classes_modelos/Peixes.js';
+import Peixes2 from './Classes_modelos/Peixes2.js';
 import Peixes3 from './Classes_modelos/Peixes3.js';
 import Tartaruga from './Classes_modelos/Tartaruga.js';
 import Treasure from './Classes_modelos/Treasure.js';
@@ -22,17 +23,12 @@ const clock = new THREE.Clock();
 const control = new OrbitControls(camera, renderer.domElement);
 control.update();
 
-const velMov = 0.5;
-const velRot = 0.5;
-let submarino = null; 
-
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2) ; 
 directionalLight.position.set(0, 1000, 0); 
 scene.add(directionalLight);
 
 const spotlight = new THREE.SpotLight(0xffffff); 
-spotlight.position.set(35, -7, -350); 
 spotlight.angle = 0.15; 
 spotlight.decay = 0.5; 
 spotlight.distance = 300; 
@@ -61,6 +57,10 @@ scene.add(particles);
 
 scene.fog = new THREE.FogExp2(0x031f4d, 0.05); 
 renderer.setClearColor(scene.fog.color);
+
+const velMov = 0.5;
+const velRot = 0.5;
+let submarino = null; 
 
 const loader = new GLTFLoader();
 loader.load('./Modelo/Submarine/scene.gltf', function (gltf) {
@@ -150,6 +150,9 @@ fundo.load(scene);
 const peixes = new Peixes();
 peixes.load(scene);
 
+const peixes2 = new Peixes2();
+peixes2.load(scene);
+
 const peixes3 = new Peixes3();
 peixes3.load(scene);
 
@@ -175,6 +178,7 @@ function animate() {
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
     peixes.update(delta); 
+    peixes2.update(delta);
     peixes3.update(delta);
     tartaruga.update(delta);
 
