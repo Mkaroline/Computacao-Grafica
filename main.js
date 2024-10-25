@@ -168,6 +168,18 @@ tartaruga.load(scene);
 const treasure = new Treasure();
 treasure.load(scene);
 
+const listener = new THREE.AudioListener();
+const audioLoader = new THREE.AudioLoader();
+const sound = new THREE.Audio(listener)
+const context = new AudioContext()
+listener.context = context
+
+audioLoader.load('./sounds/submarine-33709.mp3', function (buffer) {
+  sound.setBuffer(buffer);
+  sound.setLoop(true);
+  sound.play();
+});
+
 // Função de animação principal
 function animate() {
     requestAnimationFrame(animate);
